@@ -1,0 +1,174 @@
+# Vue 官网
+
+### 重要
+
+学习vue我们必须之到它的7个属性，8个 方法，以及7个指令。787原则
+
+- el属性
+
+- - 用来指示vue编译器从什么地方开始解析 vue的语法，可以说是一个占位符。
+
+- data属性
+
+- - 用来组织从view中抽象出来的属性，可以说将视图的数据抽象出来存放在data中。
+
+- template属性
+
+- - 用来设置模板，会替换页面元素，包括占位符。
+
+- methods属性
+
+- - 放置页面中的业务逻辑，js方法一般都放置在methods中
+
+- render属性
+
+- - 创建真正的Virtual Dom
+
+- computed属性
+
+- - 用来计算
+
+- watch属性
+
+- - watch:function(new,old){}
+  - 监听data中数据的变化
+  - 两个参数，一个返回新值，一个返回旧值，
+
+
+
+### 1  声明式渲染
+
+```vue
+<div id="app">  
+    {{ message }} 
+</div>
+```
+
+```vue
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!'
+  }
+})
+```
+
+#### 绑定元素
+
+除了可以通过{{}}绑定元素之外，还可以通过v-bind绑定元素。
+
+```vue
+<div id="app-2">
+  <span v-bind:title="message">
+    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+</div>
+
+var app2 = new Vue({
+  el: '#app-2',
+  data: {
+    message: '页面加载于 ' + new Date().toLocaleString()
+  }
+})
+```
+
+
+
+#### 2 条件与循环
+
+##### （1）if
+
+``` vue
+<div id="app-3">
+  <p v-if="seen">现在你看到我了</p>
+  <p v-else-if="seen===A">A</p>
+  <p v-else>NO</p>
+</div>
+
+var app3 = new Vue({
+  el: '#app-3',   # el的值与div的id绑定
+  data: {
+    seen: true
+  }
+})
+```
+
+继续在控制台输入 `app3.seen = false`，你会发现之前显示的消息消失了。
+
+故可知，Vue不仅仅可以绑定DOM文本，也可以绑定DOM结构，对结构进行控制。
+
+另注：Vue 也提供一个强大的过渡效果系统，可以在 Vue 插入/更新/移除元素时自动应用[过渡效果](https://vuejs.bootcss.com/guide/transitions.html)。
+
+##### (2) for
+
+```vue
+<div id="app-4">
+  <ol>
+    <li v-for="todo in todos">
+      {{ todo.text }}
+    </li>
+  </ol>
+</div>
+
+var app4 = new Vue({
+  el: '#app-4',
+  data: {
+    todos: [
+      { text: '学习 JavaScript' },
+      { text: '学习 Vue' },
+      { text: '整个牛项目' }
+    ]
+  }
+})
+```
+
+在控制台里，输入 `app4.todos.push({ text: '新项目' })`，你会发现列表最后添加了一个新项目。
+
+![image-20211221144247903](E:\001--个人有用的文件\研究生全部材料\研究生学习材料\00-typora\00-vue-study\图片\image-20211221144247903.png)
+
+#### 3 处理用户输入
+
+```vue
+v-on 指令可添加一个事件监听器，通过他调用vue实例中定义的方法
+```
+
+```shell
+<div id="app-5">
+  <p>{{ message }}</p>
+  <button v-on:click="reverseMessage">反转消息</button>
+</div>
+
+var app5 = new Vue({
+  el: '#app-5',
+  data: {
+    message: 'Hello Vue.js!'
+  },
+  methods: { //方法一定要写在methods中
+     // 定义一个reverseMessage方法
+    reverseMessage: function () {
+      this.message = this.message.split('').reverse().join('')
+    }
+  }
+})
+```
+
+注意在 `reverseMessage` 方法中，我们更新了应用的状态，但没有触碰 DOM——所有的 DOM 操作都由 Vue 来处理，你编写的代码只需要关注逻辑层面即可。
+
+#### 双向绑定
+
+指令：`v-model`
+
+```vue
+<div id="app">
+    // 加上这个v-medol之后双向绑定 前端修改，页面也修改 实时渲染
+    <input type="text" v-medol="message">{{message}}
+</div>
+
+var app5 = new Vue({
+      el: '#app',
+      data: {
+            message: 'Hello Vue.js!'
+          },
+})
+```
+
